@@ -1,0 +1,23 @@
+workflows:
+  build_gamerz_adda:
+    name: Build Gamerz Adda
+    environment:
+      flutter: stable
+      xcode: latest
+    scripts:
+      - name: Unzip project files
+        script: |
+          echo "📦 Unzipping project..."
+          unzip -o "GAMERZ ADDA.zip" -d .
+          cd "GAMERZ ADDA"
+          echo "✅ Unzipped successfully"
+      - name: Flutter pub get
+        script: |
+          cd "GAMERZ ADDA"
+          flutter pub get
+      - name: Build APK
+        script: |
+          cd "GAMERZ ADDA"
+          flutter build apk --release
+    artifacts:
+      - "GAMERZ ADDA/build/app/outputs/flutter-apk/app-release.apk"
