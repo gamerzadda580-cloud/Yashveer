@@ -7,7 +7,10 @@ workflows:
     scripts:
       - name: Unzip project files
         script: |
-          unzip "GAMERZ ADDA.zip" -d .
+          echo "📦 Unzipping project..."
+          unzip -o "GAMERZ ADDA.zip" -d .
+          cd "GAMERZ ADDA"
+          echo "✅ Unzipped successfully"
       - name: Flutter pub get
         script: |
           cd "GAMERZ ADDA"
