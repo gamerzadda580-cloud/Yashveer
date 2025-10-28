@@ -1,0 +1,46 @@
+name: Unzip GAMERZ ADDA.ZIP and commit
+
+on:
+  workflow_dispatch:
+
+jobs:
+  unzip-and-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Ensure unzip is available
+        run: sudo apt-get update && sudo apt-get install -y unzip
+
+      - name: Show repo files (debug)
+        run: ls -la
+
+      - name: Unzip GAMERZ ADDA.ZIP to Yashveer
+        run: |
+          ZIP_PATH="GAMERZ ADDA.ZIP"
+          DEST="Yashveer"
+          if [ ! -f "$ZIP_PATH" ]; then
+            echo "ZIP not found at $ZIP_PATH"
+            ls -la
+            exit 1
+          fi
+          mkdir -p "$DEST"
+          unzip -o "$ZIP_PATH" -d "$DEST"
+          ls -la "$DEST"
+
+      - name: Commit and push extracted files
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$DEST" || true
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Unzip GAMERZ ADDA.ZIP into Yashveer via GitHub Actions"
+            git push origin HEAD:main
+          fi
